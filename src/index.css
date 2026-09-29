@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    border-color: #351726;
+  }
+  
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #100C12;
+    color: #F6EBDD;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Custom scrollbar for cinema feel */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #100C12;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #351726;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #C86F91;
+  }
+}
+
+/* Hide scrollbar for carousel rows while preserving smooth horizontal scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Pixel text styling utility with crisp rendering */
+.pixel-crisp {
+  image-rendering: pixelated;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+  text-rendering: geometricPrecision;
+  letter-spacing: -0.02em;
+}
+
+/* Subtle film grain & vignette mood */
+.cinema-vignette {
+  background: radial-gradient(circle at 50% 20%, transparent 40%, rgba(16, 12, 18, 0.85) 100%);
+}
+
+.hero-gradient {
+  background: linear-gradient(180deg, rgba(16, 12, 18, 0.2) 0%, rgba(16, 12, 18, 0.75) 65%, #100C12 100%);
+}
+
+.card-backdrop-gradient {
+  background: linear-gradient(180deg, transparent 40%, rgba(16, 12, 18, 0.95) 100%);
+}
