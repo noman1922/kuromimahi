@@ -194,16 +194,16 @@ export const CuteBow: React.FC<{ className?: string; size?: number }> = ({
   );
 };
 
-// Subtle Birthday Stamp for 10.10
+// Signature Lounge Stamp for Mahi
 export const BirthdayStamp: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
     <div
       className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm border border-dusty-rose/40 bg-deep-cherry/40 shadow-pixel-tag backdrop-blur-sm group select-none ${className}`}
-      title="Special Birthday Edition: October 10"
+      title="Mahi's Private Lounge Edition"
     >
       <TinySkull className="text-soft-blush group-hover:rotate-12 transition-transform duration-200" />
       <span className="font-pixel text-[9px] tracking-wider text-soft-blush pixel-crisp">
-        10.10
+        MAHI
       </span>
       <span className="text-[10px] text-dusty-rose font-handwritten">★ special</span>
     </div>

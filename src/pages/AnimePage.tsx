@@ -9,6 +9,7 @@ import { EmptyState } from '../components/common/EmptyState';
 import { PixelBadge } from '../components/common/PixelBadge';
 import { KuromiMascot, GothStar } from '../components/common/KuromiDecorations';
 import { SkeletonGrid } from '../components/common/SkeletonCard';
+import { LoadingMessage } from '../components/common/LoadingMessage';
 
 export const AnimePage: React.FC = () => {
   const [animeList, setAnimeList] = useState<Movie[]>([]);
@@ -163,7 +164,11 @@ export const AnimePage: React.FC = () => {
                 type="button"
                 className="px-6 py-2.5 rounded-xl bg-charcoal-plum hover:bg-deep-cherry text-warm-cream border border-deep-cherry hover:border-dusty-rose/60 text-xs font-sans font-medium transition-all shadow-sm"
               >
-                {loadingMore ? 'Fetching More Anime...' : 'Load More Anime ↓'}
+                {loadingMore ? (
+                  <LoadingMessage size="xs" inline showSpinner />
+                ) : (
+                  'Load More Anime ↓'
+                )}
               </button>
             </div>
           )}

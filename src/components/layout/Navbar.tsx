@@ -67,10 +67,6 @@ export const Navbar: React.FC = () => {
                   <span className="font-pixel text-[8px] text-muted-mauve tracking-wider uppercase pixel-crisp">
                     MIDNIGHT LOUNGE
                   </span>
-                  <span className="text-deep-cherry text-[9px]">•</span>
-                  <span className="font-pixel text-[8px] text-dusty-rose tracking-wider pixel-crisp">
-                    10.10
-                  </span>
                 </div>
               </div>
             </Link>
@@ -150,7 +146,7 @@ export const Navbar: React.FC = () => {
                 LOUNGE NAVIGATION
               </span>
               <PixelBadge variant="pink" size="xs">
-                10.10 EDITION
+                LOUNGE EDITION
               </PixelBadge>
             </div>
 

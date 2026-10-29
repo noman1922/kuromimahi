@@ -8,6 +8,7 @@ import { PixelBadge } from '../components/common/PixelBadge';
 import { KuromiMascot, BirthdayStamp, GothStar } from '../components/common/KuromiDecorations';
 import { MovieCard } from '../components/movie/MovieCard';
 import { HandwrittenNote } from '../components/common/HandwrittenNote';
+import { LoadingMessage } from '../components/common/LoadingMessage';
 
 export const MovieDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -45,16 +46,9 @@ export const MovieDetailPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-28 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto animate-pulse">
-        <div className="h-64 sm:h-96 rounded-2xl bg-charcoal-plum/60 border border-deep-cherry/40 mb-8" />
-        <div className="flex flex-col md:flex-row gap-8">
-          <div className="w-48 sm:w-64 aspect-[2/3] bg-charcoal-plum rounded-2xl border border-deep-cherry/60" />
-          <div className="flex-1 space-y-4">
-            <div className="h-8 bg-charcoal-plum rounded w-2/3" />
-            <div className="h-4 bg-charcoal-plum/60 rounded w-1/3" />
-            <div className="h-24 bg-charcoal-plum/40 rounded w-full" />
-          </div>
-        </div>
+      <div className="min-h-screen pt-36 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center justify-center space-y-8">
+        <LoadingMessage size="lg" subtitle="Opening Midnight Title..." />
+        <div className="w-full max-w-3xl aspect-[16/9] rounded-2xl bg-charcoal-plum/40 border border-deep-cherry/40 animate-pulse" />
       </div>
     );
   }

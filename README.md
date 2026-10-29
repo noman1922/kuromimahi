@@ -22,13 +22,13 @@ The visual identity strikes a deliberate balance: cute without looking childish,
 - **Muted Mauve**: `#9F8998` (Metadata, subtitles & subtle tags)
 
 ### Signature Typography
-- **Pixel Font (`Press Start 2P` & `Silkscreen`)**: Retro 8-bit game lettering for dates (`10.10`), badges (`NOW PLAYING`, `MIDNIGHT LOUNGE`, `SAVED SPOT`, `K-DRAMA NOOK`), and Kuromi-inspired notes.
+- **Pixel Font (`Press Start 2P` & `Silkscreen`)**: Retro 8-bit game lettering for badges (`NOW PLAYING`, `MIDNIGHT LOUNGE`, `SAVED SPOT`, `K-DRAMA NOOK`), and Kuromi-inspired notes.
 - **Editorial Serif (`Playfair Display`)**: Elegant, refined headings.
 - **Clean Sans (`Plus Jakarta Sans`)**: Modern, accessible body text.
 - **Handwritten (`Caveat`)**: Warm, personal notes with taped paper pin styling.
 
 ### Personal Details Preserved
-- **October 10 (`10.10`)**: Special birthday stamp on the navigation, hero section, footer, and profile pass.
+- **"Midnight Lounge Pass"**: Special signature stamp on the navigation, hero section, footer, and profile pass.
 - **"Mother Teresa"**: Warm, natural messages (*"For my Mother Teresa ♡"*, *"Even Mother Teresa deserves a movie night."*).
 - **Kuromi-Inspired Details**: Pointed ear silhouettes, tiny skull motifs, star sparkles, and dusty pink accents.
 

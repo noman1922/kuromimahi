@@ -40,7 +40,7 @@ export const HeroSection: React.FC = () => {
 
       {/* Content Container */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col items-center sm:items-start">
-        {/* Badges Row: Eyebrow + 10.10 Stamp */}
+        {/* Badges Row: Eyebrow + Signature Stamp */}
         <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5 mb-5">
           <PixelBadge variant="pink" size="sm" dot>
             YOUR OWN LITTLE MIDNIGHT LOUNGE
@@ -57,17 +57,17 @@ export const HeroSection: React.FC = () => {
         </h1>
 
         {/* Description */}
-        <p className="font-sans text-sm sm:text-lg text-warm-cream/90 max-w-xl mb-6 font-normal leading-relaxed">
+        <p className="font-sans text-sm sm:text-lg text-warm-cream/90 max-w-xl mb-5 font-normal leading-relaxed">
           A cozy place for your favorite films, late-night stories, and
           everything in between. Dim the lights, grab a blanket, and stay awhile.
         </p>
 
-        {/* Handwritten Note Accent */}
-        <div className="mb-8 flex items-center justify-center sm:justify-start gap-2 bg-charcoal-plum/80 border border-deep-cherry/80 px-4 py-2 rounded-lg backdrop-blur-sm shadow-md">
-          <TinySkull className="text-soft-blush w-3.5 h-3.5" />
-          <span className="font-handwritten text-lg sm:text-xl text-soft-blush tracking-wide">
-            For Mahi, with a little extra love ♡
-          </span>
+        {/* Thoughtful Personal Note for Mahi */}
+        <div className="mb-7 max-w-lg bg-charcoal-plum/70 border border-deep-cherry/80 rounded-xl px-4 py-3 backdrop-blur-sm shadow-sm flex items-start gap-2.5 text-left select-none">
+          <TinySkull className="text-dusty-rose w-4 h-4 flex-shrink-0 mt-1" />
+          <p className="font-handwritten text-base sm:text-lg text-soft-blush/95 leading-snug">
+            Mahi, the site might be a little slow sometimes. Sorry about that! I&apos;m working on making your experience faster. ❤️
+          </p>
         </div>
 
         {/* Hero Actions */}

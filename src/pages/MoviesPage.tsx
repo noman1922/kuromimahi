@@ -9,6 +9,7 @@ import { EmptyState } from '../components/common/EmptyState';
 import { PixelBadge } from '../components/common/PixelBadge';
 import { TinySkull, GothStar } from '../components/common/KuromiDecorations';
 import { SkeletonGrid } from '../components/common/SkeletonCard';
+import { LoadingMessage } from '../components/common/LoadingMessage';
 
 export const MoviesPage: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -218,7 +219,11 @@ export const MoviesPage: React.FC = () => {
                 type="button"
                 className="px-6 py-2.5 rounded-xl bg-charcoal-plum hover:bg-deep-cherry text-warm-cream border border-deep-cherry hover:border-dusty-rose/60 text-xs font-sans font-medium transition-all shadow-sm"
               >
-                {loadingMore ? 'Fetching More Films from TMDB...' : 'Load More Films from Vault ↓'}
+                {loadingMore ? (
+                  <LoadingMessage size="xs" inline showSpinner />
+                ) : (
+                  'Load More Films from Vault ↓'
+                )}
               </button>
             </div>
           )}

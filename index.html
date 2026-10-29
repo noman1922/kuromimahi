@@ -5,13 +5,19 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mahi's Cinema — Midnight Lounge</title>
-    <meta name="description" content="A private, cute-goth midnight movie lounge made with love for Mahi (Mother Teresa). 10.10 special edition." />
+    <meta name="description" content="A private, cute-goth midnight movie lounge made with love for Mahi (Mother Teresa). Midnight private edition." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
   </head>
   <body class="bg-midnight-black text-warm-cream font-sans selection:bg-dusty-rose selection:text-midnight-black antialiased overflow-x-hidden min-h-screen">
-    <div id="root"></div>
+    <div id="root">
+      <div style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #100C12; color: #F1B6CD; font-family: 'Press Start 2P', monospace; font-size: 11px; gap: 14px; text-transform: uppercase; letter-spacing: 1px;">
+        <div style="width: 36px; height: 36px; border: 2px solid #C86F91; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+        <div>dhorjo dhoro baba</div>
+        <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

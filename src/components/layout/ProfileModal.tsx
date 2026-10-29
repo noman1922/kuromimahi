@@ -69,10 +69,10 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted-mauve flex items-center gap-1.5 font-sans">
               <Calendar className="w-3.5 h-3.5 text-dusty-rose" />
-              Special Birthday
+              Lounge Pass
             </span>
             <span className="font-pixel text-[10px] text-soft-blush pixel-crisp">
-              10.10 (OCT 10)
+              VIP ACCESS
             </span>
           </div>
 

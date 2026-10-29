@@ -62,6 +62,7 @@ export interface TmdbVideoItem {
   name: string;
   site: string;
   type: string;
+  official?: boolean;
 }
 
 export interface TmdbMovieDetails extends Omit<TmdbMovieItem, 'genre_ids'> {

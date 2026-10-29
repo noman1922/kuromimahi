@@ -5,6 +5,7 @@ import type { Movie } from '../../types/movie';
 import { MovieCard } from './MovieCard';
 import { GothStar } from '../common/KuromiDecorations';
 import { SkeletonCard } from '../common/SkeletonCard';
+import { LoadingMessage } from '../common/LoadingMessage';
 
 interface MovieRowProps {
   title: string;
@@ -125,6 +126,11 @@ export const MovieRow: React.FC<MovieRowProps> = ({
       </div>
 
       {/* Movie Horizontal Row */}
+      {isLoading && (
+        <div className="px-4 sm:px-6 lg:px-8 mb-2">
+          <LoadingMessage size="xs" inline showSpinner />
+        </div>
+      )}
       <div
         ref={rowRef}
         onScroll={checkScroll}

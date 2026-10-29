@@ -6,6 +6,7 @@ import { PlaybackPanel } from '../components/playback/PlaybackPanel';
 import { MovieCard } from '../components/movie/MovieCard';
 import { KuromiMascot, GothStar, BirthdayStamp } from '../components/common/KuromiDecorations';
 import { PixelBadge } from '../components/common/PixelBadge';
+import { LoadingMessage } from '../components/common/LoadingMessage';
 
 export const WatchPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -53,9 +54,8 @@ export const WatchPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto min-h-screen animate-pulse">
-        <div className="h-6 bg-charcoal-plum/60 rounded w-48 mb-4" />
-        <div className="aspect-[16/9] w-full rounded-2xl bg-charcoal-plum border border-deep-cherry/40" />
+      <div className="pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto min-h-screen flex flex-col items-center justify-center space-y-6">
+        <LoadingMessage size="lg" subtitle="Calibrating Midnight Screen..." />
       </div>
     );
   }

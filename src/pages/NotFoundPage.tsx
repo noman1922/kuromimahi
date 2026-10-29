@@ -46,7 +46,7 @@ export const NotFoundPage: React.FC = () => {
 
       <div className="mt-12 flex items-center gap-2 text-xs text-muted-mauve/70 font-pixel">
         <TinySkull className="text-dusty-rose w-3 h-3" />
-        <span>MAHI'S CINEMA • 10.10 EDITION</span>
+        <span>MAHI'S CINEMA • MIDNIGHT LOUNGE</span>
       </div>
     </div>
   );

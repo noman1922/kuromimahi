@@ -1,4 +1,5 @@
 import React from 'react';
+import { LoadingMessage } from './LoadingMessage';
 
 interface SkeletonCardProps {
   size?: 'sm' | 'md' | 'lg';
@@ -33,31 +34,46 @@ export const SkeletonCard: React.FC<SkeletonCardProps> = ({
   );
 };
 
-export const SkeletonRow: React.FC<{ count?: number; className?: string }> = ({
+export const SkeletonRow: React.FC<{ count?: number; className?: string; showMessage?: boolean }> = ({
   count = 6,
   className = '',
+  showMessage = true,
 }) => {
   return (
-    <div className={`flex gap-4 sm:gap-6 overflow-hidden py-2 px-4 sm:px-6 lg:px-8 ${className}`}>
-      {Array.from({ length: count }).map((_, i) => (
-        <SkeletonCard key={i} size="md" />
-      ))}
+    <div className="space-y-3">
+      {showMessage && (
+        <div className="px-4 sm:px-6 lg:px-8 py-1">
+          <LoadingMessage size="xs" inline showSpinner />
+        </div>
+      )}
+      <div className={`flex gap-4 sm:gap-6 overflow-hidden py-2 px-4 sm:px-6 lg:px-8 ${className}`}>
+        {Array.from({ length: count }).map((_, i) => (
+          <SkeletonCard key={i} size="md" />
+        ))}
+      </div>
     </div>
   );
 };
 
-export const SkeletonGrid: React.FC<{ count?: number; className?: string }> = ({
+export const SkeletonGrid: React.FC<{ count?: number; className?: string; showMessage?: boolean }> = ({
   count = 12,
   className = '',
+  showMessage = true,
 }) => {
   return (
-    <div
-      className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 ${className}`}
-    >
-      {Array.from({ length: count }).map((_, i) => (
-        <SkeletonCard key={i} size="md" className="w-full" />
-      ))}
+    <div className="space-y-4">
+      {showMessage && (
+        <div className="py-2 flex justify-center">
+          <LoadingMessage size="sm" showSpinner />
+        </div>
+      )}
+      <div
+        className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 ${className}`}
+      >
+        {Array.from({ length: count }).map((_, i) => (
+          <SkeletonCard key={i} size="md" className="w-full" />
+        ))}
+      </div>
     </div>
   );
 };
-

@@ -5,6 +5,7 @@ import type {
   TmdbMovieDetails,
   TmdbTvDetails,
   TmdbPaginatedResponse,
+  TmdbVideoItem,
 } from '../types/tmdb';
 import {
   mapTmdbMovieToMovie,
@@ -64,9 +65,10 @@ class TmdbApiClient {
     const queryString = urlParams.toString();
     const endpointWithSlash = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
 
-    // In dev mode, route via Vite proxy /api/tmdb which securely attaches credentials
-    // When running in production with client keys, route directly to TMDB API
-    const baseUrl = import.meta.env.DEV ? this.proxyUrl : this.baseDirectUrl;
+    // In browser dev mode, route via Vite proxy /api/tmdb which securely attaches credentials
+    // When running in production or node/test environments, route directly to TMDB API
+    const isBrowser = typeof window !== 'undefined';
+    const baseUrl = import.meta.env.DEV && isBrowser ? this.proxyUrl : this.baseDirectUrl;
 
     const finalUrl = `${baseUrl}${endpointWithSlash}${queryString ? `?${queryString}` : ''}`;
     const cacheKey = finalUrl;
@@ -334,6 +336,23 @@ class TmdbApiClient {
       return type === 'tv' ? items.map(mapTmdbTvToMovie) : items.map(mapTmdbMovieToMovie);
     } catch (err) {
       console.warn('TMDB getRelated error:', err);
+      return [];
+    }
+  }
+
+  /**
+   * 13. Official Videos (Trailers & Teasers)
+   */
+  public async getVideos(id: string): Promise<TmdbVideoItem[]> {
+    const { type, rawId } = parseTmdbId(id);
+    if (!rawId) return [];
+
+    try {
+      const endpoint = type === 'tv' ? `/tv/${rawId}/videos` : `/movie/${rawId}/videos`;
+      const res = await this.request<{ id: number; results: TmdbVideoItem[] }>(endpoint);
+      return res.results || [];
+    } catch (err) {
+      console.warn(`TMDB getVideos(${id}) error:`, err);
       return [];
     }
   }

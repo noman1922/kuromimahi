@@ -26,7 +26,7 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Center decorative accent: 10.10 birthday badge */}
+        {/* Center decorative accent: Signature badge */}
         <div className="flex items-center gap-3">
           <BirthdayStamp />
         </div>
