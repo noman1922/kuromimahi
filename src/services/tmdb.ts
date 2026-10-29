@@ -13,7 +13,6 @@ import {
   mapTmdbTvDetailsToMovie,
   parseTmdbId,
 } from './tmdbHelpers';
-import { AUTHENTIC_TMDB_FALLBACK } from '../data/authenticTmdbFallback';
 
 // Cache configuration
 interface CacheEntry<T> {
@@ -64,12 +63,10 @@ class TmdbApiClient {
 
     const queryString = urlParams.toString();
     const endpointWithSlash = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-    
-    // In dev mode without client credentials, route via Vite proxy /api/tmdb
-    // Otherwise route direct to TMDB API
-    const baseUrl = (!hasAuthToken && !hasApiKey && import.meta.env.DEV)
-      ? this.proxyUrl
-      : this.baseDirectUrl;
+
+    // In dev mode, route via Vite proxy /api/tmdb which securely attaches credentials
+    // When running in production with client keys, route directly to TMDB API
+    const baseUrl = import.meta.env.DEV ? this.proxyUrl : this.baseDirectUrl;
 
     const finalUrl = `${baseUrl}${endpointWithSlash}${queryString ? `?${queryString}` : ''}`;
     const cacheKey = finalUrl;
@@ -86,10 +83,10 @@ class TmdbApiClient {
     }
 
     const headers: Record<string, string> = {
-      'Accept': 'application/json',
+      Accept: 'application/json',
     };
 
-    if (hasAuthToken) {
+    if (hasAuthToken && !import.meta.env.DEV) {
       headers['Authorization'] = `Bearer ${this.accessToken}`;
     }
 
@@ -118,15 +115,12 @@ class TmdbApiClient {
    * 1. Trending Movies (/trending/movie/week)
    */
   public async getTrendingMovies(page = 1): Promise<Movie[]> {
-    if (!this.isConfigured()) {
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => m.isTrending && m.contentType === 'movie');
-    }
     try {
       const res = await this.request<TmdbPaginatedResponse<TmdbMovieItem>>('/trending/movie/week', { page });
-      return res.results.map(mapTmdbMovieToMovie);
+      return res.results?.map(mapTmdbMovieToMovie) || [];
     } catch (err) {
-      console.warn('TMDB getTrendingMovies error, using fallback:', err);
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => m.isTrending && m.contentType === 'movie');
+      console.warn('TMDB getTrendingMovies error:', err);
+      return [];
     }
   }
 
@@ -134,15 +128,12 @@ class TmdbApiClient {
    * 2. Popular Movies (/movie/popular)
    */
   public async getPopularMovies(page = 1): Promise<Movie[]> {
-    if (!this.isConfigured()) {
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => m.contentType === 'movie');
-    }
     try {
       const res = await this.request<TmdbPaginatedResponse<TmdbMovieItem>>('/movie/popular', { page });
-      return res.results.map(mapTmdbMovieToMovie);
+      return res.results?.map(mapTmdbMovieToMovie) || [];
     } catch (err) {
-      console.warn('TMDB getPopularMovies error, using fallback:', err);
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => m.contentType === 'movie');
+      console.warn('TMDB getPopularMovies error:', err);
+      return [];
     }
   }
 
@@ -150,15 +141,12 @@ class TmdbApiClient {
    * 3. Now Playing Movies (/movie/now_playing)
    */
   public async getNowPlayingMovies(page = 1): Promise<Movie[]> {
-    if (!this.isConfigured()) {
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => m.contentType === 'movie').slice(0, 8);
-    }
     try {
       const res = await this.request<TmdbPaginatedResponse<TmdbMovieItem>>('/movie/now_playing', { page });
-      return res.results.map(mapTmdbMovieToMovie);
+      return res.results?.map(mapTmdbMovieToMovie) || [];
     } catch (err) {
-      console.warn('TMDB getNowPlayingMovies error, using fallback:', err);
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => m.contentType === 'movie').slice(0, 8);
+      console.warn('TMDB getNowPlayingMovies error:', err);
+      return [];
     }
   }
 
@@ -166,15 +154,12 @@ class TmdbApiClient {
    * 4. Top Rated Movies (/movie/top_rated)
    */
   public async getTopRatedMovies(page = 1): Promise<Movie[]> {
-    if (!this.isConfigured()) {
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => (m.rating || 0) >= 8.0);
-    }
     try {
       const res = await this.request<TmdbPaginatedResponse<TmdbMovieItem>>('/movie/top_rated', { page });
-      return res.results.map(mapTmdbMovieToMovie);
+      return res.results?.map(mapTmdbMovieToMovie) || [];
     } catch (err) {
-      console.warn('TMDB getTopRatedMovies error, using fallback:', err);
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => (m.rating || 0) >= 8.0);
+      console.warn('TMDB getTopRatedMovies error:', err);
+      return [];
     }
   }
 
@@ -182,15 +167,12 @@ class TmdbApiClient {
    * 5. Popular TV Series (/tv/popular)
    */
   public async getPopularTv(page = 1): Promise<Movie[]> {
-    if (!this.isConfigured()) {
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => m.contentType === 'series');
-    }
     try {
       const res = await this.request<TmdbPaginatedResponse<TmdbTvItem>>('/tv/popular', { page });
-      return res.results.map(mapTmdbTvToMovie);
+      return res.results?.map(mapTmdbTvToMovie) || [];
     } catch (err) {
-      console.warn('TMDB getPopularTv error, using fallback:', err);
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => m.contentType === 'series');
+      console.warn('TMDB getPopularTv error:', err);
+      return [];
     }
   }
 
@@ -198,15 +180,12 @@ class TmdbApiClient {
    * 6. Trending TV Series (/trending/tv/week)
    */
   public async getTrendingTv(page = 1): Promise<Movie[]> {
-    if (!this.isConfigured()) {
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => m.contentType === 'series');
-    }
     try {
       const res = await this.request<TmdbPaginatedResponse<TmdbTvItem>>('/trending/tv/week', { page });
-      return res.results.map(mapTmdbTvToMovie);
+      return res.results?.map(mapTmdbTvToMovie) || [];
     } catch (err) {
-      console.warn('TMDB getTrendingTv error, using fallback:', err);
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => m.contentType === 'series');
+      console.warn('TMDB getTrendingTv error:', err);
+      return [];
     }
   }
 
@@ -214,9 +193,6 @@ class TmdbApiClient {
    * 7. Korean Dramas (/discover/tv with language=ko and genre=18)
    */
   public async getKoreanDramas(page = 1): Promise<Movie[]> {
-    if (!this.isConfigured()) {
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => m.isKoreanDrama);
-    }
     try {
       const res = await this.request<TmdbPaginatedResponse<TmdbTvItem>>('/discover/tv', {
         page,
@@ -224,14 +200,16 @@ class TmdbApiClient {
         with_genres: '18', // Drama
         sort_by: 'popularity.desc',
       });
-      return res.results.map((item) => {
-        const m = mapTmdbTvToMovie(item);
-        m.isKoreanDrama = true;
-        return m;
-      });
+      return (
+        res.results?.map((item) => {
+          const m = mapTmdbTvToMovie(item);
+          m.isKoreanDrama = true;
+          return m;
+        }) || []
+      );
     } catch (err) {
-      console.warn('TMDB getKoreanDramas error, using fallback:', err);
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => m.isKoreanDrama);
+      console.warn('TMDB getKoreanDramas error:', err);
+      return [];
     }
   }
 
@@ -239,9 +217,6 @@ class TmdbApiClient {
    * 8. Anime Discovery (/discover/tv with genre=16 and language=ja)
    */
   public async getAnime(page = 1): Promise<Movie[]> {
-    if (!this.isConfigured()) {
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => m.isAnime);
-    }
     try {
       const res = await this.request<TmdbPaginatedResponse<TmdbTvItem>>('/discover/tv', {
         page,
@@ -249,15 +224,17 @@ class TmdbApiClient {
         with_original_language: 'ja',
         sort_by: 'popularity.desc',
       });
-      return res.results.map((item) => {
-        const m = mapTmdbTvToMovie(item);
-        m.isAnime = true;
-        m.contentType = 'anime';
-        return m;
-      });
+      return (
+        res.results?.map((item) => {
+          const m = mapTmdbTvToMovie(item);
+          m.isAnime = true;
+          m.contentType = 'anime';
+          return m;
+        }) || []
+      );
     } catch (err) {
-      console.warn('TMDB getAnime error, using fallback:', err);
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => m.isAnime);
+      console.warn('TMDB getAnime error:', err);
+      return [];
     }
   }
 
@@ -265,23 +242,22 @@ class TmdbApiClient {
    * 9. Romantic Picks (/discover/movie with genre=10749 Romance)
    */
   public async getRomanticPicks(page = 1): Promise<Movie[]> {
-    if (!this.isConfigured()) {
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => m.isRomanticPick);
-    }
     try {
       const res = await this.request<TmdbPaginatedResponse<TmdbMovieItem>>('/discover/movie', {
         page,
         with_genres: '10749', // Romance
         sort_by: 'popularity.desc',
       });
-      return res.results.map((item) => {
-        const m = mapTmdbMovieToMovie(item);
-        m.isRomanticPick = true;
-        return m;
-      });
+      return (
+        res.results?.map((item) => {
+          const m = mapTmdbMovieToMovie(item);
+          m.isRomanticPick = true;
+          return m;
+        }) || []
+      );
     } catch (err) {
-      console.warn('TMDB getRomanticPicks error, using fallback:', err);
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => m.isRomanticPick);
+      console.warn('TMDB getRomanticPicks error:', err);
+      return [];
     }
   }
 
@@ -291,17 +267,6 @@ class TmdbApiClient {
   public async searchMulti(query: string, page = 1): Promise<Movie[]> {
     if (!query.trim()) return [];
 
-    if (!this.isConfigured()) {
-      const lower = query.toLowerCase().trim();
-      return AUTHENTIC_TMDB_FALLBACK.filter(
-        (m) =>
-          m.title.toLowerCase().includes(lower) ||
-          (m.originalTitle && m.originalTitle.toLowerCase().includes(lower)) ||
-          m.description.toLowerCase().includes(lower) ||
-          m.genres.some((g) => g.toLowerCase().includes(lower))
-      );
-    }
-
     try {
       const [moviesRes, tvRes] = await Promise.allSettled([
         this.request<TmdbPaginatedResponse<TmdbMovieItem>>('/search/movie', { query, page }),
@@ -309,16 +274,18 @@ class TmdbApiClient {
       ]);
 
       const movies: Movie[] =
-        moviesRes.status === 'fulfilled' ? moviesRes.value.results.map(mapTmdbMovieToMovie) : [];
+        moviesRes.status === 'fulfilled' && moviesRes.value.results
+          ? moviesRes.value.results.map(mapTmdbMovieToMovie)
+          : [];
       const tvShows: Movie[] =
-        tvRes.status === 'fulfilled' ? tvRes.value.results.map(mapTmdbTvToMovie) : [];
+        tvRes.status === 'fulfilled' && tvRes.value.results
+          ? tvRes.value.results.map(mapTmdbTvToMovie)
+          : [];
 
-      // Interleave results by popularity
       return [...movies, ...tvShows].sort((a, b) => (b.rating || 0) - (a.rating || 0));
     } catch (err) {
-      console.warn('TMDB searchMulti error, using fallback:', err);
-      const lower = query.toLowerCase().trim();
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => m.title.toLowerCase().includes(lower));
+      console.warn('TMDB searchMulti error:', err);
+      return [];
     }
   }
 
@@ -328,13 +295,8 @@ class TmdbApiClient {
   public async getDetailsById(id: string): Promise<Movie | undefined> {
     const { type, rawId } = parseTmdbId(id);
 
-    // If ID is not a recognized format or rawId is 0, check fallback list
     if (!rawId) {
-      return AUTHENTIC_TMDB_FALLBACK.find((m) => m.id === id);
-    }
-
-    if (!this.isConfigured()) {
-      return AUTHENTIC_TMDB_FALLBACK.find((m) => m.id === id || m.id.endsWith(`-${rawId}`));
+      return undefined;
     }
 
     try {
@@ -351,7 +313,7 @@ class TmdbApiClient {
       }
     } catch (err) {
       console.warn(`TMDB getDetailsById(${id}) error:`, err);
-      return AUTHENTIC_TMDB_FALLBACK.find((m) => m.id === id || m.id.endsWith(`-${rawId}`));
+      return undefined;
     }
   }
 
@@ -361,22 +323,18 @@ class TmdbApiClient {
   public async getRelated(movie: Movie, limit = 6): Promise<Movie[]> {
     const { type, rawId } = parseTmdbId(movie.id);
 
-    if (!rawId || !this.isConfigured()) {
-      return AUTHENTIC_TMDB_FALLBACK.filter(
-        (m) =>
-          m.id !== movie.id &&
-          (m.contentType === movie.contentType || m.genres.some((g) => movie.genres.includes(g)))
-      ).slice(0, limit);
+    if (!rawId) {
+      return [];
     }
 
     try {
       const endpoint = type === 'tv' ? `/tv/${rawId}/recommendations` : `/movie/${rawId}/recommendations`;
       const res = await this.request<TmdbPaginatedResponse<any>>(endpoint);
-      const items = res.results.slice(0, limit);
+      const items = res.results?.slice(0, limit) || [];
       return type === 'tv' ? items.map(mapTmdbTvToMovie) : items.map(mapTmdbMovieToMovie);
     } catch (err) {
-      console.warn('TMDB getRelated error, fallback to genre match:', err);
-      return AUTHENTIC_TMDB_FALLBACK.filter((m) => m.id !== movie.id).slice(0, limit);
+      console.warn('TMDB getRelated error:', err);
+      return [];
     }
   }
 }

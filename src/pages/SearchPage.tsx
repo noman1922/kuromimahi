@@ -80,7 +80,7 @@ export const SearchPage: React.FC = () => {
     return list.filter((item) => item.contentType === selectedType);
   }, [debouncedQuery, results, selectedType]);
 
-  const popularSearches = ['Crash Landing', 'Miyazaki', 'Past Lives', 'Queen of Tears', 'Interstellar', 'Howl', 'Your Name'];
+  const popularSearches = ['Romance', 'Anime', 'Drama', 'Sci-Fi', 'Fantasy', 'Inception', 'Studio Ghibli'];
 
   return (
     <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-screen">

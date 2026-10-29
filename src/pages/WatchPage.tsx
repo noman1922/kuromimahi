@@ -25,6 +25,17 @@ export const WatchPage: React.FC = () => {
         setMovie(item);
         setLoadedId(id);
         if (item) {
+          // Record genuine viewing session
+          try {
+            const raw = localStorage.getItem('mahis_cinema_watch_history_v1');
+            const history: Movie[] = raw ? JSON.parse(raw) : [];
+            const filtered = history.filter((m) => m.id !== item.id);
+            const updated = [{ ...item, progress: 5, lastEpisode: 'Session Started' }, ...filtered].slice(0, 8);
+            localStorage.setItem('mahis_cinema_watch_history_v1', JSON.stringify(updated));
+          } catch (e) {
+            console.warn('Could not save watch history:', e);
+          }
+
           tmdb.getRelated(item, 6).then((rel) => {
             if (isMounted) setRelated(rel);
           });

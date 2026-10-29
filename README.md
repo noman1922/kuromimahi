@@ -89,8 +89,8 @@ VITE_TMDB_API_KEY=
 VITE_TMDB_ACCESS_TOKEN=
 ```
 
-### Fallback Guarantee
-If no API credentials are provided or if rate limits occur, the app activates **Authentic TMDB Fallback Mode** (`src/data/authenticTmdbFallback.ts`). Every entry in this fallback corresponds to verified real TMDB records with official image paths and credits. The site never displays fake movie titles or blank broken layouts.
+### Zero Mock Data Guarantee
+All data is fetched live from TMDB API with zero fake or placeholder movie entries. If an API request fails, network connection drops, or a search returns no matches, the application presents an honest, polished dark cinema empty or error state rather than fabricating movies. Genuine viewing history and watchlist entries are persisted in browser local storage without invented progress.
 
 ---
 

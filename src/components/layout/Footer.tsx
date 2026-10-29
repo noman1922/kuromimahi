@@ -1,5 +1,5 @@
 import React from 'react';
-import { KuromiMascot, TinySkull, BirthdayStamp } from '../common/KuromiDecorations';
+import { KuromiMascot, BirthdayStamp } from '../common/KuromiDecorations';
 import { PixelBadge } from '../common/PixelBadge';
 
 export const Footer: React.FC = () => {
@@ -32,14 +32,33 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Right side tribute */}
-        <div className="flex flex-col items-center md:items-end text-xs text-muted-mauve space-y-1">
-          <div className="flex items-center gap-1.5 font-pixel text-[8px] text-muted-mauve pixel-crisp">
-            <span>POWERED BY TMDB API</span>
-            <TinySkull className="text-dusty-rose" />
-            <span>EST. 2026</span>
+        <div className="flex flex-col items-center md:items-end text-xs text-muted-mauve space-y-1.5">
+          <div className="flex items-center gap-2">
+            <svg
+              className="h-3.5 w-auto"
+              viewBox="0 0 185 15"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-label="The Movie Database (TMDB) logo"
+            >
+              <defs>
+                <linearGradient id="tmdbGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#90cea1" />
+                  <stop offset="50%" stopColor="#01b4e4" />
+                  <stop offset="100%" stopColor="#0d253f" />
+                </linearGradient>
+              </defs>
+              <rect width="185" height="15" rx="3" fill="#1D1420" stroke="#351726" />
+              <text x="8" y="11" fill="url(#tmdbGrad)" fontSize="9" fontWeight="bold" fontFamily="sans-serif">
+                THE MOVIE DATABASE
+              </text>
+            </svg>
+            <span className="font-pixel text-[8px] text-muted-mauve pixel-crisp">
+              EST. 2026
+            </span>
           </div>
-          <p className="font-sans text-[11px] text-muted-mauve/80">
-            Real metadata provided by The Movie Database. Not endorsed or certified by TMDB.
+          <p className="font-sans text-[11px] text-muted-mauve/80 max-w-sm">
+            This product uses the TMDB API but is not endorsed or certified by TMDB.
           </p>
         </div>
       </div>

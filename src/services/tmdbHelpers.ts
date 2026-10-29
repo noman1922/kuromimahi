@@ -5,14 +5,14 @@ export const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p';
 
 export function getTmdbPosterUrl(path: string | null | undefined, size: 'w342' | 'w500' | 'w780' = 'w500'): string {
   if (!path) {
-    return 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80';
+    return '';
   }
   return `${TMDB_IMAGE_BASE}/${size}${path}`;
 }
 
 export function getTmdbBackdropUrl(path: string | null | undefined, size: 'w780' | 'w1280' | 'original' = 'w1280'): string {
   if (!path) {
-    return 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1600&q=80';
+    return '';
   }
   return `${TMDB_IMAGE_BASE}/${size}${path}`;
 }

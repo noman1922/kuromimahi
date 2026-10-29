@@ -33,7 +33,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
         className={`relative ${sizeClasses} rounded-xl overflow-hidden bg-charcoal-plum border border-deep-cherry/80 transition-all duration-300 group-hover:scale-[1.03] group-hover:border-dusty-rose/70 group-hover:shadow-card-hover`}
       >
         {/* Poster Image with Graceful Fallback */}
-        {!imageError ? (
+        {!imageError && movie.poster ? (
           <img
             src={movie.poster}
             alt={movie.title}

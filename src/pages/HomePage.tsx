@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { Movie } from '../types/movie';
 import { tmdb } from '../services/tmdb';
-import { AUTHENTIC_TMDB_FALLBACK } from '../data/authenticTmdbFallback';
 import { HeroSection } from '../components/hero/HeroSection';
 import { MovieRow } from '../components/movie/MovieRow';
 import { ContinueWatchingCard } from '../components/movie/ContinueWatchingCard';
@@ -9,32 +8,31 @@ import { HandwrittenNote } from '../components/common/HandwrittenNote';
 import { PixelBadge } from '../components/common/PixelBadge';
 import { BirthdayStamp, GothStar, TinySkull } from '../components/common/KuromiDecorations';
 
+const WATCH_HISTORY_KEY = 'mahis_cinema_watch_history_v1';
+
 export const HomePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [trendingMovies, setTrendingMovies] = useState<Movie[]>(() =>
-    AUTHENTIC_TMDB_FALLBACK.filter((m) => m.isTrending && m.contentType === 'movie')
-  );
-  const [kdramaMovies, setKdramaMovies] = useState<Movie[]>(() =>
-    AUTHENTIC_TMDB_FALLBACK.filter((m) => m.isKoreanDrama)
-  );
-  const [animeMovies, setAnimeMovies] = useState<Movie[]>(() =>
-    AUTHENTIC_TMDB_FALLBACK.filter((m) => m.isAnime)
-  );
-  const [romanticMovies, setRomanticMovies] = useState<Movie[]>(() =>
-    AUTHENTIC_TMDB_FALLBACK.filter((m) => m.isRomanticPick)
-  );
-  const [quietNightMovies, setQuietNightMovies] = useState<Movie[]>(() =>
-    AUTHENTIC_TMDB_FALLBACK.filter((m) => m.isQuietNight)
-  );
-  const [seriesMovies, setSeriesMovies] = useState<Movie[]>(() =>
-    AUTHENTIC_TMDB_FALLBACK.filter((m) => m.contentType === 'series')
-  );
-  const [recentlyAddedMovies, setRecentlyAddedMovies] = useState<Movie[]>(() =>
-    AUTHENTIC_TMDB_FALLBACK.filter((m) => m.isRecentlyAdded)
-  );
-
-  // Continue Watching uses verified authentic entries with saved demo progress
-  const continueWatchingMovies = AUTHENTIC_TMDB_FALLBACK.filter((m) => m.isContinueWatching);
+  const [trendingMovies, setTrendingMovies] = useState<Movie[]>([]);
+  const [kdramaMovies, setKdramaMovies] = useState<Movie[]>([]);
+  const [animeMovies, setAnimeMovies] = useState<Movie[]>([]);
+  const [romanticMovies, setRomanticMovies] = useState<Movie[]>([]);
+  const [quietNightMovies, setQuietNightMovies] = useState<Movie[]>([]);
+  const [seriesMovies, setSeriesMovies] = useState<Movie[]>([]);
+  const [recentlyAddedMovies, setRecentlyAddedMovies] = useState<Movie[]>([]);
+  const [continueWatchingMovies] = useState<Movie[]>(() => {
+    try {
+      const raw = localStorage.getItem(WATCH_HISTORY_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.warn('Could not load genuine watch history:', e);
+    }
+    return [];
+  });
 
   useEffect(() => {
     let isMounted = true;
@@ -54,29 +52,29 @@ export const HomePage: React.FC = () => {
 
         if (!isMounted) return;
 
-        if (trending.status === 'fulfilled' && trending.value.length > 0) {
+        if (trending.status === 'fulfilled') {
           setTrendingMovies(trending.value);
         }
-        if (kdramas.status === 'fulfilled' && kdramas.value.length > 0) {
+        if (kdramas.status === 'fulfilled') {
           setKdramaMovies(kdramas.value);
         }
-        if (anime.status === 'fulfilled' && anime.value.length > 0) {
+        if (anime.status === 'fulfilled') {
           setAnimeMovies(anime.value);
         }
-        if (romance.status === 'fulfilled' && romance.value.length > 0) {
+        if (romance.status === 'fulfilled') {
           setRomanticMovies(romance.value);
         }
-        if (quietNight.status === 'fulfilled' && quietNight.value.length > 0) {
+        if (quietNight.status === 'fulfilled') {
           setQuietNightMovies(quietNight.value);
         }
-        if (series.status === 'fulfilled' && series.value.length > 0) {
+        if (series.status === 'fulfilled') {
           setSeriesMovies(series.value);
         }
-        if (nowPlaying.status === 'fulfilled' && nowPlaying.value.length > 0) {
+        if (nowPlaying.status === 'fulfilled') {
           setRecentlyAddedMovies(nowPlaying.value);
         }
       } catch (err) {
-        console.warn('Error fetching TMDB home streams:', err);
+        console.warn('Error fetching TMDB live streams:', err);
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -95,7 +93,7 @@ export const HomePage: React.FC = () => {
       <HeroSection />
 
       <div className="space-y-4">
-        {/* 2. Continue Watching (Clear demo label) */}
+        {/* 2. Continue Watching (Only shown when genuine viewing history exists) */}
         {continueWatchingMovies.length > 0 && (
           <section className="py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div className="flex items-center justify-between mb-4">
@@ -109,7 +107,7 @@ export const HomePage: React.FC = () => {
                 </PixelBadge>
               </div>
               <span className="text-[11px] font-sans text-muted-mauve hidden sm:inline">
-                Demo progress model ready for cloud sync
+                Real watch progress saved in your browser
               </span>
             </div>
 
@@ -125,8 +123,8 @@ export const HomePage: React.FC = () => {
         <MovieRow
           title="Trending Tonight"
           movies={trendingMovies}
-          badgeText="HOT IN LOUNGE"
-          note="Stories lighting up the midnight marquee"
+          badgeText="TMDB LIVE TRENDING"
+          note="Stories lighting up the global midnight marquee"
           viewAllLink="/movies"
           isLoading={loading && trendingMovies.length === 0}
         />
@@ -183,7 +181,7 @@ export const HomePage: React.FC = () => {
         <MovieRow
           title="Movies for a Quiet Night"
           movies={quietNightMovies}
-          badgeText="SLOW BURN"
+          badgeText="TMDB TOP RATED"
           note="Low light, gentle soundtracks, and space to breathe."
           isLoading={loading && quietNightMovies.length === 0}
         />
@@ -201,7 +199,7 @@ export const HomePage: React.FC = () => {
         <MovieRow
           title="Recently Added to the Lounge"
           movies={recentlyAddedMovies}
-          badgeText="NEW ARRIVALS"
+          badgeText="NOW PLAYING"
           isLoading={loading && recentlyAddedMovies.length === 0}
         />
       </div>

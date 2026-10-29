@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Sparkles, RotateCcw } from 'lucide-react';
 import type { Movie } from '../types/movie';
 import { tmdb } from '../services/tmdb';
-import { AUTHENTIC_TMDB_FALLBACK } from '../data/authenticTmdbFallback';
 import { MovieGrid } from '../components/movie/MovieGrid';
 import { GenreFilter } from '../components/movie/GenreFilter';
 import { SearchBar } from '../components/movie/SearchBar';
@@ -12,9 +11,7 @@ import { KuromiMascot, GothStar } from '../components/common/KuromiDecorations';
 import { SkeletonGrid } from '../components/common/SkeletonCard';
 
 export const AnimePage: React.FC = () => {
-  const [animeList, setAnimeList] = useState<Movie[]>(() =>
-    AUTHENTIC_TMDB_FALLBACK.filter((m) => m.contentType === 'anime' || m.isAnime)
-  );
+  const [animeList, setAnimeList] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
